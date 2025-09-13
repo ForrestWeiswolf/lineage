@@ -1,5 +1,5 @@
-const { pick, romanize } = require('./utils')
-const { Format, WeightedRandom } = require('meristem')
+import { Format, WeightedRandom } from 'meristem'
+import { pick, romanize } from './utils'
 
 const v = new WeightedRandom({
   'a': 7,
@@ -91,4 +91,4 @@ const generateName = (sex, notables, allPeople) => {
   }
 }
 
-module.exports = generateName
+export default generateName

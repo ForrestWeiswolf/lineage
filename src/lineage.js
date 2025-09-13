@@ -1,4 +1,4 @@
-const generateName = require('./generateName')
+import generateName from './generateName'
 
 class Person {
   constructor(
@@ -182,4 +182,4 @@ const printTree = (tree) => {
 //   .forEach(p => console.log(p.toString()))
 // console.log('Tree:\n', printTree(tree))
 
-module.exports = runHistory
+export default runHistory

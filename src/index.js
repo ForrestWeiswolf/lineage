@@ -1,4 +1,4 @@
-const runHistory = require('./lineage.js')
+import runHistory from './lineage.js'
 
 const { events, allPeople, tree } = runHistory(445)
 
