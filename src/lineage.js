@@ -61,7 +61,7 @@ class Person {
   }
 
   toString() {
-    return `${this.title()} ${this.name} (${this.infoString}), child of ${this.parent.name}`
+    return `${this.title()} ${this.name} (${this.infoString()}), child of ${this.parent.name}`
   }
 }
 
