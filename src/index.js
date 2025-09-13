@@ -1,8 +1,7 @@
+import * as d3 from 'd3'
 import runHistory from './lineage.js'
+import createTreeChart from './createTreeChart.js'
 
-const { events, allPeople, tree } = runHistory(445)
-
-const element = document.createElement('div')
-element.innerHTML = events.join('\n')
-
-document.body.appendChild(element)
+const { familyTree } = runHistory(445)
+document.getElementById('container')
+  .appendChild(createTreeChart(familyTree))

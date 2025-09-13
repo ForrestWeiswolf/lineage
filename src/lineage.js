@@ -156,7 +156,7 @@ const runHistory = (years => {
     })
   }
 
-  return { events, allPeople, tree: notables[1] }
+  return { events, allPeople, familyTree: notables[1] }
 })
 
 const printTree = (tree) => {
@@ -173,13 +173,13 @@ const printTree = (tree) => {
   return result
 }
 
-// const { events, allPeople, tree } = runHistory(445)
+// const { events, allPeople, familyTree } = runHistory(445)
 // console.log(events.join('\n'))
 // console.log('\n')
 // console.log('Currently alive:')
 // allPeople.filter(p => p.alive)
 //   .sort((p1, p2) => p2.circle() - p1.circle())
 //   .forEach(p => console.log(p.toString()))
-// console.log('Tree:\n', printTree(tree))
+// console.log('Tree:\n', printTree(familyTree))
 
 export default runHistory
