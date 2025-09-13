@@ -56,8 +56,12 @@ class Person {
     return Math.min(this.circleMax, Math.floor(this.level() / 2))
   }
 
+  infoString(){
+    return `age ${this.age} , circle ${this.circle()}, lvl ${this.level()}, max circle ${this.circleMax}`
+  }
+
   toString() {
-    return `${this.title()} ${this.name}, age ${this.age} (circle ${this.circle()}, lvl ${this.level()}, max circle ${this.circleMax}), child of ${this.parent.name}`
+    return `${this.title()} ${this.name} (${this.infoString}), child of ${this.parent.name}`
   }
 }
 
