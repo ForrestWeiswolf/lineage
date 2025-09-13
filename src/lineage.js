@@ -61,7 +61,7 @@ class Person {
   }
 
   toString() {
-    return `${this.title()} ${this.name} (${this.infoString()}), child of ${this.parent.name}`
+    return `${this.title()} ${this.name} (${this.infoString()})`
   }
 }
 
@@ -167,7 +167,7 @@ const printTree = (tree) => {
   let result = ''
   let encloser = tree.alive ? '' : '~~'
 
-  result += `- ${encloser}${tree.toString().replace(/, child of .+/, '')}${encloser}`
+  result += `- ${encloser}${tree.toString()}${encloser}`
   result += '\n'
 
   tree.children.forEach(child => {
