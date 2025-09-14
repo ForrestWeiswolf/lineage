@@ -36,10 +36,8 @@ const fc = new WeightedRandom({
   'm': 1,
   'r': 3,
   'v': 1,
-  // 'z': 1,
   'j': 1,
 })
-
 
 const initial = new WeightedRandom({
   '(ic)': 9,
@@ -68,15 +66,15 @@ const generateWord = () => {
     .replaceAll(/([aeiou]){2}/g, '$1\'$1')
 }
 
-const generateName = (sex, notables, allPeople) => {
+const generateName = (sex, namesakes, allPeople) => {
   if (Math.random() < 0.3) {
     const uncased = generateWord()
     if (uncased.length < 3) {
-      return generateName(sex, notables, allPeople)
+      return generateName(sex, namesakes, allPeople)
     }
     return uncased[0].toUpperCase() + uncased.split('').splice(1).join('')
   } else {
-    const namesake = pick(notables
+    const namesake = pick(namesakes
       .filter(
         n => n.sex === sex
           && !allPeople.find(p => p.shortName() === n.shortName() && p.alive)
@@ -87,7 +85,7 @@ const generateName = (sex, notables, allPeople) => {
       namesake.namedAfter++
       return `${namesake.shortName()} ${romanize(namesake.namedAfter + 1)}`
     }
-    return generateName(sex, notables, allPeople)
+    return generateName(sex, namesakes, allPeople)
   }
 }
 
