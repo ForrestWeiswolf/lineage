@@ -80,6 +80,8 @@ const getLineOfSuccession = (monarch) => {
 }
 
 const runHistory = (years => {
+  const events = []
+
   const root = new Person(null,
     0,
     "Rokhana Stonesong",
@@ -157,7 +159,6 @@ const runHistory = (years => {
     }
   }
 
-  const events = []
   for (let i = 0; i < years; i++) {
     flattenTree(root)
       .filter(p => p.alive)
