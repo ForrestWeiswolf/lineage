@@ -64,6 +64,7 @@ const generateWord = () => {
     .replaceAll(/khkh/g, 'sh')
     .replaceAll(/([aeiou])([^aeiou])([aeiou])/g, '$1$2$2$3')
     .replaceAll(/([aeiou]){2}/g, '$1\'$1')
+    .replaceAll(/e$/g, '')
 }
 
 const getNamesakes = (tree) => flattenTree(tree).filter(p => p.level() >= 16 || p.circle >= 7 || p.isMonarch)
