@@ -30,7 +30,7 @@ class Person {
   title() {
     if (this.isMonarch) {
       return this.sex === 'M' ? 'King' : 'Queen'
-    } else if (this.parent.isMonarch || this.circle >= 5) {
+    } else if (this.parent.isMonarch || this.circle() >= 5) {
       return this.sex === 'M' ? 'Prince' : 'Princess'
     } else {
       return this.sex === 'M' ? 'Lord' : 'Lady'
