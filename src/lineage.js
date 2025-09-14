@@ -163,27 +163,5 @@ const runHistory = (years => {
   return { events, allPeople, familyTree: notables[1] }
 })
 
-const printTree = (tree) => {
-  let result = ''
-  let encloser = tree.alive ? '' : '~~'
-
-  result += `- ${encloser}${tree.toString()}${encloser}`
-  result += '\n'
-
-  tree.children.forEach(child => {
-    result += printTree(child).split('\n').map(line => line.length > 1 ? '  ' + line : line).join('\n')
-  })
-
-  return result
-}
-
-// const { events, allPeople, familyTree } = runHistory(445)
-// console.log(events.join('\n'))
-// console.log('\n')
-// console.log('Currently alive:')
-// allPeople.filter(p => p.alive)
-//   .sort((p1, p2) => p2.circle() - p1.circle())
-//   .forEach(p => console.log(p.toString()))
-// console.log('Tree:\n', printTree(familyTree))
 
 export default runHistory
