@@ -17,13 +17,20 @@ export const romanize = (num) => {
   return result
 }
 
+export const traverseTree = (root, fn) => {
+  let stack = [root]
+
+
+  while (stack.length > 0) {
+    let node = stack.pop()
+    fn(node)
+    stack.push(...node.children)
+  }
+}
+
 export const flattenTree = (root) => {
   let result = []
-  let stack = [root]
-  while (stack.length > 0) {
-    result.push(stack.pop())
-    stack.push(...result[result.length - 1].children)
-  }
+  traverseTree(root, node => result.push(node))
 
   return result
 }
