@@ -118,7 +118,7 @@ const runHistory = (years => {
       && (!p.isMonarch || Math.random() < .5)
     ) {
       p.alive = false
-      events.push(`In year ${year}, ${p.toString()}, died`)
+      events.push(`In year ${year}, ${p.toString()} died`)
       if (p.isMonarch) {
         let los = getLineOfSuccession(p)
         const monarch = los[0]
