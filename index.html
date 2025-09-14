@@ -4,11 +4,36 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width initial-scale=1.0">
+	<style>
+		.flex {
+			display: flex;
+		}
+
+		#info-container {
+			justify-content: space-around
+		}
+
+		#events {
+			width: 66%;
+		}
+
+		#living-people {
+			width: 33%;
+		}
+	</style>
 	<title>tree</title>
 </head>
 
 <body>
-	<div id="container"></div>
+	<div id="tree-container"></div>
+	<div id="info-container" class="flex">
+		<details id="events">
+			<summary>Events</summary>
+		</details>
+		<details id="living-people">
+			<summary>Living people</summary>
+		</details>
+	</div>
 	<script src="./dist/main.js"></script>
 </body>
 
