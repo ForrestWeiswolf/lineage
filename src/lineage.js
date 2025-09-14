@@ -56,7 +56,7 @@ class Person {
     return Math.min(this.circleMax, Math.floor(this.level() / 2))
   }
 
-  infoString(){
+  infoString() {
     return `age ${this.age} , circle ${this.circle()}, lvl ${this.level()}, max circle ${this.circleMax}`
   }
 
@@ -97,13 +97,13 @@ const runHistory = (years => {
         }
       }
 
-      if (p.married && Math.random() < Math.pow(p.age / (180 + p.circleMax * 10), 10)) {
+      if (p.married && (Math.random() < Math.pow(p.age / (200 + p.circleMax * 10), 15))) {
         p.married = false
         events.push(`In year ${i}, ${p.title()} ${p.name}'s spouse died`)
       }
 
       if (
-        (Math.random() < Math.pow(p.age / (180 + p.circleMax * 10), 10))
+        (Math.random() < Math.pow(p.age / (200 + p.circleMax * 10), 15))
         && (p.isMonarch && Math.random() < .5)
       ) {
         p.alive = false
@@ -162,6 +162,5 @@ const runHistory = (years => {
 
   return { events, allPeople, familyTree: notables[1] }
 })
-
 
 export default runHistory
