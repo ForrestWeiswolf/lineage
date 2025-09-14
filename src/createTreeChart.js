@@ -6,7 +6,7 @@ import * as d3 from 'd3'
 // https://observablehq.com/@d3/tree
 
 const createTreeChart = (data) => {
-  const width = 928
+  const width = 1000
 
   // Compute the tree height; this approach will allow the height of the
   // SVG to scale according to the breadth (width) of the tree layout.
@@ -34,7 +34,7 @@ const createTreeChart = (data) => {
   const height = x1 - x0 + dx * 2
 
   const svg = d3.create("svg")
-    .attr("width", width)
+    .attr("width", '100vw')
     .attr("height", height)
     .attr("viewBox", [-dy / 3, x0 - dx, width, height])
     .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;")
