@@ -68,6 +68,18 @@ class Person {
 
 const getNamesakes = (people) => people.filter(p => p.level() >= 16 || p.circle >= 7 || p.isMonarch)
 
+const getLineOfSuccession = (monarch) => {
+  let los = []
+  let current = monarch
+  while (current.children) {
+    los = [...los, ...current.children]
+    current = current.parent
+  }
+
+  return los.filter(
+    potentialSuccessor => potentialSuccessor.alive && potentialSuccessor.circle() >= 5
+  )
+}
 
 const runHistory = (years => {
   const allPeople = []
@@ -108,16 +120,8 @@ const runHistory = (years => {
       p.alive = false
       events.push(`In year ${year}, ${p.toString()}, died`)
       if (p.isMonarch) {
-        let los = []
-        let current = p
-        while (current.children) {
-          los = [...los, ...current.children]
-          current = current.parent
-        }
-
-        const monarch = los.find(
-          potentialSuccessor => potentialSuccessor.alive && potentialSuccessor.circle() >= 5
-        )
+        let los = getLineOfSuccession(p)
+        const monarch = los[0]
         if (monarch) {
           monarch.isMonarch = true
           events.push(`${monarch.title()} ${monarch.name} inherited the throne`)
