@@ -1,7 +1,8 @@
 import runHistory from './lineage.js'
 import createTreeChart from './createTreeChart.js'
+import { flattenTree } from './utils'
 
-const { familyTree, events, allPeople } = runHistory(445)
+const { familyTree, events } = runHistory(445)
 
 const eventsList = document.getElementById('events')
 
@@ -12,7 +13,7 @@ events.forEach(event => {
 })
 
 const livingList = document.getElementById('living-people')
-allPeople
+flattenTree(familyTree)
   .filter(p => p.alive)
   .sort((a, b) => a.isMonarch ? -Infinity : b.circle() - a.circle())
   .forEach(person => {

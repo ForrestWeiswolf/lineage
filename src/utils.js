@@ -16,3 +16,14 @@ export const romanize = (num) => {
   }
   return result
 }
+
+export const flattenTree = (root) => {
+  let result = []
+  let stack = [root]
+  while (stack.length > 0) {
+    result.push(stack.pop())
+    stack.push(...result[result.length - 1].children)
+  }
+
+  return result
+}

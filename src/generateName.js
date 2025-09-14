@@ -1,5 +1,5 @@
 import { Format, WeightedRandom } from 'meristem'
-import { pick, romanize } from './utils'
+import { pick, romanize, flattenTree } from './utils'
 
 const v = new WeightedRandom({
   'a': 7,
@@ -66,18 +66,18 @@ const generateWord = () => {
     .replaceAll(/([aeiou]){2}/g, '$1\'$1')
 }
 
-const generateName = (sex, namesakes, allPeople) => {
+const generateName = (sex, namesakes, tree) => {
   if (Math.random() < 0.3) {
     const uncased = generateWord()
     if (uncased.length < 3) {
-      return generateName(sex, namesakes, allPeople)
+      return generateName(sex, namesakes, tree)
     }
     return uncased[0].toUpperCase() + uncased.split('').splice(1).join('')
   } else {
     const namesake = pick(namesakes
       .filter(
         n => n.sex === sex
-          && !allPeople.find(p => p.shortName() === n.shortName() && p.alive)
+          && !flattenTree(tree).find(p => p.shortName() === n.shortName() && p.alive)
       )
     )
     if (namesake) {
@@ -85,7 +85,7 @@ const generateName = (sex, namesakes, allPeople) => {
       namesake.namedAfter++
       return `${namesake.shortName()} ${romanize(namesake.namedAfter + 1)}`
     }
-    return generateName(sex, namesakes, allPeople)
+    return generateName(sex, namesakes, tree)
   }
 }
 

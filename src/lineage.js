@@ -1,5 +1,5 @@
 import generateName from './generateName'
-
+import { flattenTree } from './utils'
 class Person {
   constructor(
     parent,
@@ -66,12 +66,12 @@ class Person {
   }
 }
 
-const getNamesakes = (people) => people.filter(p => p.level() >= 16 || p.circle >= 7 || p.isMonarch)
+const getNamesakes = (tree) => flattenTree(tree).filter(p => p.level() >= 16 || p.circle >= 7 || p.isMonarch)
 
 const getLineOfSuccession = (monarch) => {
   let los = []
   let current = monarch
-  while (current.children) {
+  while (current && current.children) {
     los = [...los, ...current.children]
     current = current.parent
   }
@@ -82,19 +82,18 @@ const getLineOfSuccession = (monarch) => {
 }
 
 const runHistory = (years => {
-  const allPeople = []
+  const root = {
+    name: "Rokhana Stonesong", shortName: () => "Rokhana", level: () => 16, circleMax: 0, sex: 'F', children: []
+  }
 
-  allPeople.push({ name: "Rokhana Stonesong", shortName: () => "Rokhana", level: () => 16, circleMax: 0, sex: 'F' })
-  allPeople.push(
-    new Person(allPeople[0],
-      9,
-      "Ishvu Goldcrowned",
-      'F',
-      (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15) * 1000,
-      true,
-      40, [], true, true, 17
-    )
-  )
+  root.children.push(new Person(root,
+    9,
+    "Ishvu Goldcrowned",
+    'F',
+    (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15) * 1000,
+    true,
+    40, [], true, true, 17
+  ))
 
   const updatePerson = (p, year) => {
     p.age += 1
@@ -119,6 +118,7 @@ const runHistory = (years => {
     ) {
       p.alive = false
       events.push(`In year ${year}, ${p.toString()} died`)
+
       if (p.isMonarch) {
         let los = getLineOfSuccession(p)
         const monarch = los[0]
@@ -139,9 +139,8 @@ const runHistory = (years => {
     ) {
       const childCircleMax = Math.random > 0.85 ? p.circleMax - 2 : p.circleMax - 1
       const sex = Math.random() < 0.5 ? 'M' : 'F'
-      const child = new Person(p, Math.max(childCircleMax, 0), generateName(sex, getNamesakes(allPeople), allPeople), sex)
+      const child = new Person(p, Math.max(childCircleMax, 0), generateName(sex, getNamesakes(root), root), sex)
       p.children.push(child)
-      allPeople.push(child)
       events.push(`In year ${year}, ${p.toString()} had a child: ${child.name}`)
     }
 
@@ -157,10 +156,12 @@ const runHistory = (years => {
 
   const events = []
   for (let i = 0; i < years; i++) {
-    allPeople.filter(p => p.alive).forEach(p => updatePerson(p, i))
+    flattenTree(root)
+      .filter(p => p.alive)
+      .forEach(p => updatePerson(p, i))
   }
 
-  return { events, allPeople, familyTree: allPeople[1] }
+  return { events, familyTree: root.children[0] }
 })
 
 export default runHistory
