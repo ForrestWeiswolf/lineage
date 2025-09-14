@@ -104,7 +104,7 @@ const runHistory = (years => {
 
       if (
         (Math.random() < Math.pow(p.age / (200 + p.circleMax * 10), 15))
-        && (p.isMonarch && Math.random() < .5)
+        && (!p.isMonarch || Math.random() < .5)
       ) {
         p.alive = false
         events.push(`In year ${i}, ${p.toString()}, died`)
