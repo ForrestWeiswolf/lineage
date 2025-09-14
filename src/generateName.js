@@ -66,15 +66,17 @@ const generateWord = () => {
     .replaceAll(/([aeiou]){2}/g, '$1\'$1')
 }
 
-const generateName = (sex, namesakes, tree) => {
+const getNamesakes = (tree) => flattenTree(tree).filter(p => p.level() >= 16 || p.circle >= 7 || p.isMonarch)
+
+const generateName = (sex, tree) => {
   if (Math.random() < 0.3) {
     const uncased = generateWord()
     if (uncased.length < 3) {
-      return generateName(sex, namesakes, tree)
+      return generateName(sex, tree)
     }
     return uncased[0].toUpperCase() + uncased.split('').splice(1).join('')
   } else {
-    const namesake = pick(namesakes
+    const namesake = pick(getNamesakes(tree)
       .filter(
         n => n.sex === sex
           && !flattenTree(tree).find(p => p.shortName() === n.shortName() && p.alive)
@@ -85,7 +87,7 @@ const generateName = (sex, namesakes, tree) => {
       namesake.namedAfter++
       return `${namesake.shortName()} ${romanize(namesake.namedAfter + 1)}`
     }
-    return generateName(sex, namesakes, tree)
+    return generateName(sex, tree)
   }
 }
 

@@ -66,8 +66,6 @@ class Person {
   }
 }
 
-const getNamesakes = (tree) => flattenTree(tree).filter(p => p.level() >= 16 || p.circle >= 7 || p.isMonarch)
-
 const getLineOfSuccession = (monarch) => {
   let los = []
   let current = monarch
@@ -82,9 +80,14 @@ const getLineOfSuccession = (monarch) => {
 }
 
 const runHistory = (years => {
-  const root = {
-    name: "Rokhana Stonesong", shortName: () => "Rokhana", level: () => 16, circleMax: 0, sex: 'F', children: []
-  }
+  const root = new Person(null,
+    0,
+    "Rokhana Stonesong",
+    'F',
+    (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14) * 1000,
+    true,
+    130, [], true, true, 16
+  )
 
   root.children.push(new Person(root,
     9,
@@ -139,7 +142,7 @@ const runHistory = (years => {
     ) {
       const childCircleMax = Math.random > 0.85 ? p.circleMax - 2 : p.circleMax - 1
       const sex = Math.random() < 0.5 ? 'M' : 'F'
-      const child = new Person(p, Math.max(childCircleMax, 0), generateName(sex, getNamesakes(root), root), sex)
+      const child = new Person(p, Math.max(childCircleMax, 0), generateName(sex, root), sex)
       p.children.push(child)
       events.push(`In year ${year}, ${p.toString()} had a child: ${child.name}`)
     }
@@ -147,8 +150,8 @@ const runHistory = (years => {
     if (p.level() < p.maxLevel) {
       p.xp += Math.min(p.age / 100, 0.01) * 360
       p.xp += p.circleMax / 10 * 360
-      p.xp += p.maxLevel + (p.parent.level ? p.parent.level() : 20)
-      if (p.parent.isMonarch) {
+      p.xp += p.maxLevel + (p?.parent?.level ? p.parent.level() : 20)
+      if (p.parent?.isMonarch) {
         p.xp += 100
       }
     }
