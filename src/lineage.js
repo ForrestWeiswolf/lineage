@@ -43,8 +43,9 @@ class Person {
 
   level() {
     let xp = this.xp
-    let lvl = 1
-    while (xp > 0) {
+    let lvl = 0
+
+    while (xp > lvl * 1000) {
       xp -= lvl * 1000
       lvl++
     }
