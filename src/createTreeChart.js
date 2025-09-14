@@ -70,9 +70,8 @@ const createTreeChart = (data) => {
     .attr("dy", "0.6em")
     .attr("x", d => d.children ? -6 : 6)
     .attr("text-anchor", d => d.children ? "end" : "start")
+    .attr("text-decoration", d => d.data.alive ? "" : "line-through")
     .text(d => d.data.name)
-    .attr("stroke", "white")
-    .attr("paint-order", "stroke")
 
   return svg.node()
 }
