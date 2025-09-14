@@ -57,7 +57,7 @@ class Person {
   }
 
   infoString() {
-    return `age ${this.age} , circle ${this.circle()}, lvl ${this.level()}, max circle ${this.circleMax}`
+    return `age ${this.age}, circle ${this.circle()}, lvl ${this.level()}, max circle ${this.circleMax}`
   }
 
   toString() {

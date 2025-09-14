@@ -12,11 +12,14 @@ events.forEach(event => {
 })
 
 const livingList = document.getElementById('living-people')
-allPeople.filter(p => p.alive).forEach(person => {
-  const element = document.createElement('p')
-  element.textContent = person.toString()
-  livingList.appendChild(element)
-})
+allPeople
+  .filter(p => p.alive)
+  .sort((a, b) => a.isMonarch ? -Infinity : b.circle() - a.circle())
+  .forEach(person => {
+    const element = document.createElement('p')
+    element.textContent = person.toString()
+    livingList.appendChild(element)
+  })
 
 document.getElementById('tree-container')
   .appendChild(createTreeChart(familyTree))
@@ -24,5 +27,5 @@ document.getElementById('tree-container')
 document.getElementById('info-container')
   .appendChild(eventsList)
 
-  document.getElementById('info-container')
+document.getElementById('info-container')
   .appendChild(livingList)
