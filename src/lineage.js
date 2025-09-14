@@ -123,7 +123,6 @@ const runHistory = (years => {
           events.push(`${monarch.title()} ${monarch.name} inherited the throne`)
         } else {
           events.push('There was a succession crisis!')
-          events.push('Potential successors:' + los.filter(potentialSuccessor => potentialSuccessor.alive).map(p => p.toString()).join(', '))
         }
       }
     }
