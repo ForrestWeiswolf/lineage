@@ -60,12 +60,12 @@ const word = new Format('(syl)(end)', {
 
 const generateWord = () => {
   return word.expand()
-    .replace('xs', 's')
-    .replace('x', 'kh')
-    .replace('shsh', 'sh')
-    .replace('khkh', 'sh')
-    .replace(/([aeiou])([^aeiou])([aeiou])/, '$1$2$2$3')
-    .replace(/([aeiou]){2}/, '$1\'$1')
+    .replaceAll(/xs/g, 's')
+    .replaceAll(/x/g, 'kh')
+    .replaceAll(/shsh/g, 'sh')
+    .replaceAll(/khkh/g, 'sh')
+    .replaceAll(/([aeiou])([^aeiou])([aeiou])/g, '$1$2$2$3')
+    .replaceAll(/([aeiou]){2}/g, '$1\'$1')
 }
 
 const generateName = (sex, notables, allPeople) => {
