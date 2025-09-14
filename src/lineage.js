@@ -1,5 +1,6 @@
 import generateName from './generateName'
 import { flattenTree } from './utils'
+
 class Person {
   constructor(
     parent,
@@ -28,7 +29,9 @@ class Person {
   }
 
   title() {
-    if (this.isMonarch) {
+    if (!this.parent) {
+      return null
+    } else if (this.isMonarch) {
       return this.sex === 'M' ? 'King' : 'Queen'
     } else if (this.parent.isMonarch || this.circle() >= 5) {
       return this.sex === 'M' ? 'Prince' : 'Princess'
@@ -87,8 +90,8 @@ const runHistory = (years => {
     "Rokhana Stonesong",
     'F',
     (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14) * 1000,
-    true,
-    130, [], true, true, 16
+    false,
+    130, [], false, true, 16
   )
 
   root.children.push(new Person(root,
