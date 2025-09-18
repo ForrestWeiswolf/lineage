@@ -65,7 +65,7 @@ class Person {
   }
 
   toString() {
-    return `${this.title()} ${this.name} (${this.infoString()})`
+    return `${this.title() ? this.title() + ' ' : ''}${this.name} (${this.infoString()})`
   }
 
   willMarry() {
