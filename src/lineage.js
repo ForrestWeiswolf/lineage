@@ -67,6 +67,25 @@ class Person {
   toString() {
     return `${this.title()} ${this.name} (${this.infoString()})`
   }
+
+  willMarry() {
+    return !this.married && this.age > 30 && this.age < 180 && (
+      (this.children.length === 0 && Math.random() < 0.2)
+      || (this.children.length !== 0 && Math.random() < 0.01)
+    )
+  }
+
+  willDie() {
+    return Math.random() < Math.pow(this.age / (200 + this.circleMax * 10), 15)
+      && (!this.isMonarch || Math.random() < .5)
+  }
+
+  willHaveChild() {
+    return this.married
+      && (this.age < (this.sex === 'M' ? 160 : 120))
+      && (Math.random() > (this.age / (180))) && (Math.random() > 0.96)
+      && (Math.random() > (this.children.length / 10))
+  }
 }
 
 const getLineOfSuccession = (monarch) => {
@@ -105,14 +124,9 @@ const runHistory = (years => {
 
   const updatePerson = (p, year) => {
     p.age += 1
-    if (!p.married && p.age > 30 && p.age < 180) {
-      if (
-        (p.children.length === 0 && Math.random() < 0.2)
-        || (p.children.length !== 0 && Math.random() < 0.01)
-      ) {
-        p.married = true
-        events.push(`In year ${year}, ${p.title()} ${p.name} got married at age ${p.age}`)
-      }
+    if (p.willMarry()) {
+      p.married = true
+      events.push(`In year ${year}, ${p.title()} ${p.name} got married at age ${p.age}`)
     }
 
     if (p.married && (Math.random() < Math.pow(p.age / (200 + p.circleMax * 10), 15))) {
@@ -120,10 +134,7 @@ const runHistory = (years => {
       events.push(`In year ${year}, ${p.title()} ${p.name}'s spouse died`)
     }
 
-    if (
-      (Math.random() < Math.pow(p.age / (200 + p.circleMax * 10), 15))
-      && (!p.isMonarch || Math.random() < .5)
-    ) {
+    if (p.willDie()) {
       p.alive = false
       events.push(`In year ${year}, ${p.toString()} died`)
 
@@ -139,12 +150,7 @@ const runHistory = (years => {
       }
     }
 
-    if (p.married
-      && (p.age < (p.sex === 'M' ? 160 : 120))
-      && (Math.random() > (p.age / (180)))
-      && (Math.random() > 0.96)
-      && (Math.random() > (p.children.length / 10))
-    ) {
+    if (p.willHaveChild()) {
       const childCircleMax = Math.random > 0.85 ? p.circleMax - 2 : p.circleMax - 1
       const sex = Math.random() < 0.5 ? 'M' : 'F'
       const child = new Person(p, Math.max(childCircleMax, 0), generateName(sex, root), sex)
