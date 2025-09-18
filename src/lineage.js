@@ -1,5 +1,5 @@
 import generateName from './generateName'
-import { flattenTree } from './utils'
+import { traverseTree } from './utils'
 
 class Person {
   constructor(
@@ -106,17 +106,6 @@ class Person {
       if (this.willDie()) {
         alive = false
         events.push(`In year ${year}, ${this.toString()} died`)
-
-        // if (this.isMonarch) {
-        //   let los = getLineOfSuccession(this)
-        //   const monarch = los[0]
-        //   if (monarch) {
-        //     monarch.isMonarch = true
-        //     events.push(`${monarch.title()} ${monarch.name} inherited the throne`)
-        //   } else {
-        //     events.push('There was a succession crisis!')
-        //   }
-        // }
       }
 
       if (this.willHaveChild()) {
@@ -137,7 +126,6 @@ class Person {
       }
     }
 
-
     const updated = new Person(this.parent, this.circleMax, this.name, this.sex,
       xp,
       this.isMonarch,
@@ -153,6 +141,16 @@ class Person {
   }
 }
 
+const getMonarch = (tree) => {
+  let monarch = null
+  traverseTree(tree, person => {
+    if (person.isMonarch && person.alive) {
+      monarch = person
+    }
+  })
+  return monarch
+}
+
 const getLineOfSuccession = (monarch) => {
   let los = []
   let current = monarch
@@ -162,7 +160,7 @@ const getLineOfSuccession = (monarch) => {
   }
 
   return los.filter(
-    potentialSuccessor => potentialSuccessor.alive && potentialSuccessor.circle() >= 5
+    potentialSuccessor => potentialSuccessor.alive && potentialSuccessor.circle() >= 5 && potentialSuccessor !== monarch
   )
 }
 
@@ -187,9 +185,30 @@ const runHistory = (years => {
     40, [], true, true, 17
   ))
 
+  let stateByYear = [root]
 
   for (let i = 0; i < years; i++) {
+    stateByYear.push(root)
+
     root = root.update(i, events, root)
+
+    if (!getMonarch(root)) {
+      const prevMonarch = getMonarch(stateByYear[stateByYear.length - 1])
+      const los = getLineOfSuccession(prevMonarch)
+      const newMonarchName = los[0] && los[0].name
+      if (newMonarchName) {
+        traverseTree(root, person => {
+          if (person.name === newMonarchName) {
+            person.isMonarch = true
+            events.push(`${person.title()} ${person.name} inherited the throne`)
+          }
+        })
+      }
+
+      if(prevMonarch && !newMonarchName){
+        events.push('There was a succession crisis!')
+      }
+    }
   }
 
   return { events, familyTree: root.children[0] }
