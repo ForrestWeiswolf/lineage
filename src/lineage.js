@@ -86,6 +86,71 @@ class Person {
       && (Math.random() > (this.age / (180))) && (Math.random() > 0.96)
       && (Math.random() > (this.children.length / 10))
   }
+
+  update(year, events, root) {
+    let { married, alive, xp, age } = this
+    let children = this.children.map(child => child.update(year, events, root))
+    if (this.alive) {
+      age += 1
+
+      if (this.willMarry()) {
+        married = true
+        events.push(`In year ${year}, ${this.title()} ${this.name} got married at age ${this.age}`)
+      }
+
+      if (this.married && (Math.random() < Math.pow(this.age / (200 + this.circleMax * 10), 15))) {
+        married = false
+        events.push(`In year ${year}, ${this.title()} ${this.name}'s spouse died`)
+      }
+
+      if (this.willDie()) {
+        alive = false
+        events.push(`In year ${year}, ${this.toString()} died`)
+
+        // if (this.isMonarch) {
+        //   let los = getLineOfSuccession(this)
+        //   const monarch = los[0]
+        //   if (monarch) {
+        //     monarch.isMonarch = true
+        //     events.push(`${monarch.title()} ${monarch.name} inherited the throne`)
+        //   } else {
+        //     events.push('There was a succession crisis!')
+        //   }
+        // }
+      }
+
+      if (this.willHaveChild()) {
+        const childCircleMax = Math.random > 0.85 ? this.circleMax - 2 : this.circleMax - 1
+        const sex = Math.random() < 0.5 ? 'M' : 'F'
+        const child = new Person(this, Math.max(childCircleMax, 0), generateName(sex, root), sex)
+        children.push(child)
+        events.push(`In year ${year}, ${this.toString()} had a child: ${child.name}`)
+      }
+
+      if (this.level() < this.maxLevel) {
+        xp += Math.min(this.age / 100, 0.01) * 360
+        xp += this.circleMax / 10 * 360
+        xp += this.maxLevel + (this?.parent?.level ? this.parent.level() : 20)
+        if (this.parent?.isMonarch) {
+          xp += 100
+        }
+      }
+    }
+
+
+    const updated = new Person(this.parent, this.circleMax, this.name, this.sex,
+      xp,
+      this.isMonarch,
+      age,
+      children,
+      married,
+      alive,
+      this.maxLevel
+    )
+
+    updated.children.forEach(c => c.parent = updated)
+    return updated
+  }
 }
 
 const getLineOfSuccession = (monarch) => {
@@ -104,7 +169,7 @@ const getLineOfSuccession = (monarch) => {
 const runHistory = (years => {
   const events = []
 
-  const root = new Person(null,
+  let root = new Person(null,
     0,
     "Rokhana Stonesong",
     'F',
@@ -122,56 +187,9 @@ const runHistory = (years => {
     40, [], true, true, 17
   ))
 
-  const updatePerson = (p, year) => {
-    p.age += 1
-    if (p.willMarry()) {
-      p.married = true
-      events.push(`In year ${year}, ${p.title()} ${p.name} got married at age ${p.age}`)
-    }
-
-    if (p.married && (Math.random() < Math.pow(p.age / (200 + p.circleMax * 10), 15))) {
-      p.married = false
-      events.push(`In year ${year}, ${p.title()} ${p.name}'s spouse died`)
-    }
-
-    if (p.willDie()) {
-      p.alive = false
-      events.push(`In year ${year}, ${p.toString()} died`)
-
-      if (p.isMonarch) {
-        let los = getLineOfSuccession(p)
-        const monarch = los[0]
-        if (monarch) {
-          monarch.isMonarch = true
-          events.push(`${monarch.title()} ${monarch.name} inherited the throne`)
-        } else {
-          events.push('There was a succession crisis!')
-        }
-      }
-    }
-
-    if (p.willHaveChild()) {
-      const childCircleMax = Math.random > 0.85 ? p.circleMax - 2 : p.circleMax - 1
-      const sex = Math.random() < 0.5 ? 'M' : 'F'
-      const child = new Person(p, Math.max(childCircleMax, 0), generateName(sex, root), sex)
-      p.children.push(child)
-      events.push(`In year ${year}, ${p.toString()} had a child: ${child.name}`)
-    }
-
-    if (p.level() < p.maxLevel) {
-      p.xp += Math.min(p.age / 100, 0.01) * 360
-      p.xp += p.circleMax / 10 * 360
-      p.xp += p.maxLevel + (p?.parent?.level ? p.parent.level() : 20)
-      if (p.parent?.isMonarch) {
-        p.xp += 100
-      }
-    }
-  }
 
   for (let i = 0; i < years; i++) {
-    flattenTree(root)
-      .filter(p => p.alive)
-      .forEach(p => updatePerson(p, i))
+    root = root.update(i, events, root)
   }
 
   return { events, familyTree: root.children[0] }
