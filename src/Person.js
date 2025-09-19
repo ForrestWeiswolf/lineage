@@ -27,15 +27,15 @@ class Person {
     this.maxLevel = maxLevel
   }
 
-  title() {
+  titledName() {
     if (!this.parent) {
-      return null
+      return this.name
     } else if (this.isMonarch) {
-      return this.sex === 'M' ? 'King' : 'Queen'
+      return this.sex === 'M' ? `King ${this.name}` : `Queen ${this.name}`
     } else if (this.parent.isMonarch || this.circle() >= 5) {
-      return this.sex === 'M' ? 'Prince' : 'Princess'
+      return this.sex === 'M' ? `Prince ${this.name}` : `Princess ${this.name}`
     } else {
-      return this.sex === 'M' ? 'Lord' : 'Lady'
+      return this.sex === 'M' ? `Lord ${this.name}` : `Lady ${this.name}`
     }
   }
 
@@ -64,7 +64,7 @@ class Person {
   }
 
   toString() {
-    return `${this.title() ? this.title() + ' ' : ''}${this.name} (${this.infoString()})`
+    return `${this.titledName()} (${this.infoString()})`
   }
 
   willMarry() {
@@ -96,12 +96,12 @@ class Person {
 
       if (this.willMarry()) {
         married = true
-        events.push(`${this.title()} ${this.name} got married at age ${this.age}`)
+        events.push(`${this.titledName()} got married at age ${this.age}`)
       }
 
       if (this.married && (Math.random() < Math.pow(this.age / (200 + this.circleMax * 10), 15))) {
         married = false
-        events.push(`${this.title()} ${this.name}'s spouse died`)
+        events.push(`${this.titledName()}'s spouse died`)
       }
 
       if (this.willDie()) {
