@@ -86,27 +86,27 @@ class Person {
       && (Math.random() > (this.children.length / 10))
   }
 
-  update(year, events, root) {
+  update(events, root) {
     // Note: doesn't handle royal inheritance; that's done elsewhere
 
     let { married, alive, xp, age } = this
-    let children = this.children.map(child => child.update(year, events, root))
+    let children = this.children.map(child => child.update(events, root))
     if (this.alive) {
       age += 1
 
       if (this.willMarry()) {
         married = true
-        events.push(`In year ${year}, ${this.title()} ${this.name} got married at age ${this.age}`)
+        events.push(`${this.title()} ${this.name} got married at age ${this.age}`)
       }
 
       if (this.married && (Math.random() < Math.pow(this.age / (200 + this.circleMax * 10), 15))) {
         married = false
-        events.push(`In year ${year}, ${this.title()} ${this.name}'s spouse died`)
+        events.push(`${this.title()} ${this.name}'s spouse died`)
       }
 
       if (this.willDie()) {
         alive = false
-        events.push(`In year ${year}, ${this.toString()} died`)
+        events.push(`${this.toString()} died`)
       }
 
       if (this.willHaveChild()) {
@@ -114,7 +114,7 @@ class Person {
         const sex = Math.random() < 0.5 ? 'M' : 'F'
         const child = new Person(this, Math.max(childCircleMax, 0), generateName(sex, root), sex)
         children.push(child)
-        events.push(`In year ${year}, ${this.toString()} had a child: ${child.name}`)
+        events.push(`${this.toString()} had a child: ${child.name}`)
       }
 
       if (this.level() < this.maxLevel) {

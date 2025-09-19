@@ -2,14 +2,22 @@ import runHistory from './lineage.js'
 import createTreeChart from './createTreeChart.js'
 import { flattenTree } from './utils'
 
-const { familyTree, events } = runHistory(445)
+const { familyTree, eventsByYear } = runHistory(445)
 
 const eventsList = document.getElementById('events')
 
-events.forEach(event => {
-  const element = document.createElement('p')
-  element.textContent = event
-  eventsList.appendChild(element)
+eventsByYear.forEach((events, year) => {
+  if(events.length > 0){
+    const yearLabel = document.createElement('b')
+    yearLabel.textContent = `Year ${year}`
+    eventsList.appendChild(yearLabel)
+
+    events.forEach(event => {
+      const eventEntry = document.createElement('p')
+      eventEntry.textContent = event
+      eventsList.appendChild(eventEntry)
+    })
+  }
 })
 
 const livingList = document.getElementById('living-people')
@@ -24,9 +32,3 @@ flattenTree(familyTree)
 
 document.getElementById('tree-container')
   .appendChild(createTreeChart(familyTree))
-
-document.getElementById('info-container')
-  .appendChild(eventsList)
-
-document.getElementById('info-container')
-  .appendChild(livingList)

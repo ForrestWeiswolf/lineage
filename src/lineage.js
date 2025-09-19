@@ -46,11 +46,13 @@ const runHistory = (years => {
   ))
 
   let stateByYear = [root]
+  let eventsByYear = []
 
   for (let i = 0; i < years; i++) {
     stateByYear.push(root)
+    eventsByYear.push([])
 
-    root = root.update(i, events, root)
+    root = root.update(eventsByYear[eventsByYear.length - 1], root)
 
     if (!getMonarch(root)) {
       const prevMonarch = getMonarch(stateByYear[stateByYear.length - 1])
@@ -71,7 +73,7 @@ const runHistory = (years => {
     }
   }
 
-  return { events, familyTree: root.children[0] }
+  return { eventsByYear, familyTree: root.children[0] }
 })
 
 export default runHistory
