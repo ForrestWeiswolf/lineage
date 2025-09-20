@@ -2,7 +2,7 @@ import { flattenTree } from './utils'
 
 const populateInfoContainer = (eventsByYear, familyTree) => {
   const eventsList = document.getElementById('events')
-  eventsList.innerHTML = ''
+  eventsList.innerHTML = '<summary><b>Events</b></summary>'
 
   eventsByYear.forEach((events, year) => {
     if (events.length > 0) {
@@ -19,7 +19,7 @@ const populateInfoContainer = (eventsByYear, familyTree) => {
   })
 
   const livingList = document.getElementById('living-people')
-  livingList.innerHTML = ''
+  livingList.innerHTML = '<summary><b>Living People</b></summary>'
 
   flattenTree(familyTree)
     .filter(p => p.alive)

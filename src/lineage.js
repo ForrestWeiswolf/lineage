@@ -73,7 +73,7 @@ const runHistory = (years => {
     }
   }
 
-  return { eventsByYear, familyTree: root.children[0] }
+  return { eventsByYear, stateByYear }
 })
 
 export default runHistory
