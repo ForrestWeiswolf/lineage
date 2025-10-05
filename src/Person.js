@@ -67,49 +67,49 @@ class Person {
     return `${this.titledName()} (${this.infoString()})`
   }
 
-  willMarry() {
-    return !this.married && this.age > 30 && this.age < 180 && (
+  willMarry({baseLifespan}) {
+    return !this.married && this.age > (baseLifespan * .16) && this.age < (baseLifespan * .9) && (
       (this.children.length === 0 && Math.random() < 0.2)
       || (this.children.length !== 0 && Math.random() < 0.01)
     )
   }
 
-  willDie() {
-    return Math.random() < Math.pow(this.age / (200 + this.circleMax * 10), 15)
+  willDie({baseLifespan}) {
+    return Math.random() < Math.pow(this.age / (baseLifespan + this.circleMax * 10), 15)
       && (!this.isMonarch || Math.random() < .5)
   }
 
-  willHaveChild() {
+  willHaveChild({baseLifespan}) {
     return this.married
-      && (this.age < (this.sex === 'M' ? 160 : 120))
-      && (Math.random() > (this.age / (180))) && (Math.random() > 0.96)
+      && (this.age < (this.sex === 'M' ? (baseLifespan * .8) : (baseLifespan * .6)))
+      && (Math.random() > (this.age / (baseLifespan * .9))) && (Math.random() > 0.96)
       && (Math.random() > (this.children.length / 10))
   }
 
-  update(events, root) {
+  update(events, root, settings) {
     // Note: doesn't handle royal inheritance; that's done elsewhere
 
     let { married, alive, xp, age } = this
-    let children = this.children.map(child => child.update(events, root))
+    let children = this.children.map(child => child.update(events, root, settings))
     if (this.alive) {
       age += 1
 
-      if (this.willMarry()) {
+      if (this.willMarry(settings)) {
         married = true
         events.push(`${this.titledName()} got married at age ${this.age}`)
       }
 
-      if (this.married && (Math.random() < Math.pow(this.age / (200 + this.circleMax * 10), 15))) {
+      if (this.married && (Math.random() < Math.pow(this.age / (settings.baseLifespan + this.circleMax * 10), 15))) {
         married = false
         events.push(`${this.titledName()}'s spouse died`)
       }
 
-      if (this.willDie()) {
+      if (this.willDie(settings)) {
         alive = false
         events.push(`${this.toString()} died`)
       }
 
-      if (this.willHaveChild()) {
+      if (this.willHaveChild(settings)) {
         const childCircleMax = Math.random > 0.85 ? this.circleMax - 2 : this.circleMax - 1
         const sex = Math.random() < 0.5 ? 'M' : 'F'
         const child = new Person(this, Math.max(childCircleMax, 0), generateName(sex, root), sex)

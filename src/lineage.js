@@ -24,7 +24,7 @@ const getLineOfSuccession = (monarch) => {
   )
 }
 
-const runHistory = (years => {
+const runHistory = ((settings) => {
   const events = []
 
   let root = new Person(null,
@@ -48,11 +48,11 @@ const runHistory = (years => {
   let stateByYear = [root]
   let eventsByYear = []
 
-  for (let i = 0; i < years; i++) {
+  for (let i = 0; i < settings.historyLength; i++) {
     stateByYear.push(root)
     eventsByYear.push([])
 
-    root = root.update(eventsByYear[eventsByYear.length - 1], root)
+    root = root.update(eventsByYear[eventsByYear.length - 1], root, settings)
 
     if (!getMonarch(root)) {
       const prevMonarch = getMonarch(stateByYear[stateByYear.length - 1])
