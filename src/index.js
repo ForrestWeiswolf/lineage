@@ -2,7 +2,7 @@ import runHistory from './lineage.js'
 import createTreeChart from './createTreeChart.js'
 import populateInfoContainer from './populateInfoContainer.js'
 
-const settings = { historyLength: 500, baseLifespan: 200 }
+const settings = { historyLength: 500, baseLifespan: 220 }
 const { stateByYear, eventsByYear } = runHistory(settings)
 
 const yearSelect = document.getElementById('year-select')
