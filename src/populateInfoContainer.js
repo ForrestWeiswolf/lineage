@@ -23,7 +23,7 @@ const populateInfoContainer = (eventsByYear, familyTree) => {
 
   flattenTree(familyTree)
     .filter(p => p.alive)
-    .sort((a, b) => a.isMonarch ? -Infinity : b.circle() - a.circle())
+    .sort((a, b) => (b.isMonarch ? Infinity : b.circle()) - a.circle())
     .forEach(person => {
       const element = document.createElement('p')
       element.textContent = person.toString()
