@@ -14,10 +14,19 @@ for (let i = 0; i < settings.historyLength; i++) {
   option.textContent = i
   yearSelect.appendChild(option)
 }
-yearSelect.value = currentYear
 
 yearSelect.onchange = e => {
   currentYear = e.target.value
+  display(currentYear)
+}
+
+document.getElementById('next').onclick = e => {
+  currentYear = currentYear + 1
+  display(currentYear)
+}
+
+document.getElementById('prev').onclick = e => {
+  currentYear = currentYear - 1
   display(currentYear)
 }
 
@@ -27,7 +36,7 @@ const display = (year) => {
     .appendChild(createTreeChart(stateByYear[year]))
 
   populateInfoContainer(eventsByYear.slice(0, year), stateByYear[year])
-
+  yearSelect.value = currentYear
 }
 
 display(currentYear)
