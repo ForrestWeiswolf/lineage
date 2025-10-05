@@ -62,13 +62,13 @@ const runHistory = (years => {
         traverseTree(root, person => {
           if (person.name === newMonarchName) {
             person.isMonarch = true
-            events.push(`${person.titledName()} inherited the throne`)
+            eventsByYear[eventsByYear.length - 1].push(`${person.titledName()} inherited the throne`)
           }
         })
       }
 
-      if(prevMonarch && !newMonarchName){
-        events.push('There was a succession crisis!')
+      if (prevMonarch && !newMonarchName) {
+        eventsByYear[eventsByYear.length - 1].push('There was a succession crisis!')
       }
     }
   }

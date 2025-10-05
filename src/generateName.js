@@ -3,7 +3,6 @@ import { pick, romanize, flattenTree } from './utils'
 
 const hasOnlyNumericValues = (obj) => Object.values(obj).every(val => typeof val === 'number')
 
-
 const parseDefinitionsObject = (obj) => {
   const result = {}
   Object.entries(obj).map(([key, val]) => {
