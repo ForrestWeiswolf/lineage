@@ -1,60 +1,48 @@
 import { Format, WeightedRandom } from 'meristem'
 import { pick, romanize, flattenTree } from './utils'
 
-const v = new WeightedRandom({
-  'a': 7,
-  'e': 6,
-  'i': 6,
-  'u': 2,
-  'o': 2
-})
-
-const ic = new WeightedRandom({
-  'p': 1,
-  't': 1,
-  'k': 3,
-  'b': 1,
-  'd': 2,
-  'g': 1,
-  'f': 1,
-  // 's': 1,
-  'sh': 2,
-  'x': 6,
-  'v': 1,
-  // 'z': 1,
-  'j': 1,
-  'gh': 2,
-  'n': 2,
-  'm': 1,
-  'r': 6,
-})
-
-const fc = new WeightedRandom({
-  'sh': 4,
-  'x': 3,
-  'n': 2,
-  'm': 1,
-  'r': 3,
-  'v': 1,
-  'j': 1,
-})
-
-const initial = new WeightedRandom({
-  '(ic)': 9,
-  '': 1
-})
+const hasOnlyNumericValues = (obj) => Object.values(obj).every(val => typeof val === 'number')
 
 
-const final = new WeightedRandom({
-  '(fc)': 2,
-  '': 4
-})
+const parseDefinitionsObject = (obj) => {
+  const result = {}
+  Object.entries(obj).map(([key, val]) => {
+    if (typeof val === 'object' && hasOnlyNumericValues(val)) {
+      result[key] = new WeightedRandom(val)
+    } else {
+      result[key] = val
+    }
+  })
 
-const word = new Format('(syl)(end)', {
+  return result
+}
+
+const definitions = {
+  v: {
+    'a': 7, 'e': 6, 'i': 6, 'u': 2, 'o': 2
+  },
+  ic: {
+    'p': 1, 't': 1, 'k': 3,
+    'b': 1, 'd': 2, 'g': 1,
+    'f': 1, 'sh': 2, 'x': 6,
+    'v': 1, 'j': 1, 'gh': 2,
+    'n': 2, 'm': 1,
+    'r': 6,
+  },
+  fc: {
+    'sh': 4, 'x': 3,
+    'v': 1, 'j': 1,
+    'n': 2, 'm': 1,
+    'r': 3,
+  },
+  initial: { '(ic)': 9, '': 1 },
+  final: { '(fc)': 2, '': 4 },
   syl: '(initial)(v)(final)',
-  end: new WeightedRandom(['(syl)', 3], ['', 1]),
-  initial, final, v, ic, fc
-})
+  end: { '(syl)': 3, '': 1 },
+}
+
+const word = new Format('(syl)(end)', parseDefinitionsObject(definitions))
+
 
 const generateWord = () => {
   return word.expand()
