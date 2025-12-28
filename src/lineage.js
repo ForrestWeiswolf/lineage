@@ -1,5 +1,5 @@
 import Person from './Person'
-import { traverseTree } from './utils'
+import { traverseTree, flattenTree } from './utils'
 
 const getMonarch = (tree) => {
   let monarch = null
@@ -11,12 +11,17 @@ const getMonarch = (tree) => {
   return monarch
 }
 
-const getLineOfSuccession = (monarch) => {
-  let los = []
-  let current = monarch
-  while (current && current.children) {
-    los = [...los, ...current.children]
-    current = current.parent
+export const getLineOfSuccession = (monarch) => {
+  console.log({ monarch })
+  let los = [monarch]
+  let i = 0
+  while (i < los.length) {
+    console.log(los, i)
+    los.push(...los[i].children.filter(p => !los.includes(p)))
+    if (los[i]?.parent !== null && !los.includes(los[i].parent)) {
+      los.push(los[i].parent)
+    }
+    i++
   }
 
   return los.filter(
@@ -56,19 +61,26 @@ const runHistory = ((settings) => {
 
     if (!getMonarch(root)) {
       const prevMonarch = getMonarch(stateByYear[stateByYear.length - 1])
-      const los = getLineOfSuccession(prevMonarch)
-      const newMonarchName = los[0] && los[0].name
-      if (newMonarchName) {
-        traverseTree(root, person => {
-          if (person.name === newMonarchName) {
-            person.isMonarch = true
-            eventsByYear[eventsByYear.length - 1].push(`${person.titledName()} inherited the throne`)
-          }
-        })
-      }
+      if (prevMonarch) {
+        const los = getLineOfSuccession(prevMonarch)
+        // console.log({ i, los }, flattenTree(root.children[0])
+        //   .filter(p => p.alive)
+        //   .sort((a, b) => (b.isMonarch ? Infinity : b.circle()) - a.circle())
+        //   .map(person => person.toString())
+        // )
+        const newMonarchName = los[0] && los[0].name
+        if (newMonarchName) {
+          traverseTree(root, person => {
+            if (person.name === newMonarchName) {
+              person.isMonarch = true
+              eventsByYear[eventsByYear.length - 1].push(`${person.titledName()} inherited the throne. Current line of succession: ${getLineOfSuccession(person).join(',')}`)
+            }
+          })
+        }
 
-      if (prevMonarch && !newMonarchName) {
-        eventsByYear[eventsByYear.length - 1].push('There was a succession crisis!')
+        if (prevMonarch && !newMonarchName) {
+          eventsByYear[eventsByYear.length - 1].push('There was a succession crisis!')
+        }
       }
     }
   }
