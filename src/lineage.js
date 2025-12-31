@@ -63,17 +63,12 @@ const runHistory = ((settings) => {
       const prevMonarch = getMonarch(stateByYear[stateByYear.length - 1])
       if (prevMonarch) {
         const los = getLineOfSuccession(prevMonarch)
-        // console.log({ i, los }, flattenTree(root.children[0])
-        //   .filter(p => p.alive)
-        //   .sort((a, b) => (b.isMonarch ? Infinity : b.circle()) - a.circle())
-        //   .map(person => person.toString())
-        // )
         const newMonarchName = los[0] && los[0].name
         if (newMonarchName) {
           traverseTree(root, person => {
             if (person.name === newMonarchName) {
               person.isMonarch = true
-              eventsByYear[eventsByYear.length - 1].push(`${person.titledName()} inherited the throne. Current line of succession: ${getLineOfSuccession(person).join(',')}`)
+              eventsByYear[eventsByYear.length - 1].push(`${person.titledName()} inherited the throne. Current line of succession: ${getLineOfSuccession(person).join(', ')}`)
             }
           })
         }
