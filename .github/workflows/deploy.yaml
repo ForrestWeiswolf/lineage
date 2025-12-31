@@ -7,15 +7,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build static files
-      id: build
     - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: Set up node
+      uses: actions/setup-node@v4
       with:
         node-version: '20.x'
         cache: 'yarn'
-    - run: yarn --frozen-lockfile
-    - run: yarn build
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+    - name: Build JS bundle
+      run: yarn build
 
     - name: Upload static files as artifact
       id: deployment
